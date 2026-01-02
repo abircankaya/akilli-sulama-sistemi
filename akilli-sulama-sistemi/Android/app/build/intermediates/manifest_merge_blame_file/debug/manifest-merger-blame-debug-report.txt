@@ -1,0 +1,171 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.ahmetbircan.akillisulama"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="26"
+9        android:targetSdkVersion="34" />
+10
+11    <!-- Internet izni (API için) -->
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:6:5-67
+12-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:6:22-64
+13    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+13-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:7:5-79
+13-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:7:22-76
+14
+15    <!-- Bluetooth izinleri -->
+16    <uses-permission android:name="android.permission.BLUETOOTH" />
+16-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:10:5-68
+16-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:10:22-65
+17    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+17-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:11:5-74
+17-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:11:22-71
+18    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+18-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:12:5-76
+18-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:12:22-73
+19    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+19-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:13:5-73
+19-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:13:22-70
+20
+21    <!-- Konum izni (Bluetooth tarama için gerekli) -->
+22    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+22-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:16:5-79
+22-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:16:22-76
+23    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+23-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:17:5-81
+23-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:17:22-78
+24
+25    <uses-feature
+25-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:19:5-87
+26        android:name="android.hardware.bluetooth"
+26-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:19:19-60
+27        android:required="true" />
+27-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:19:61-84
+28
+29    <permission
+29-->[androidx.core:core:1.12.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/fa491052a0c4e52c4bc12c333827ee1c/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+30        android:name="com.ahmetbircan.akillisulama.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+30-->[androidx.core:core:1.12.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/fa491052a0c4e52c4bc12c333827ee1c/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+31        android:protectionLevel="signature" />
+31-->[androidx.core:core:1.12.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/fa491052a0c4e52c4bc12c333827ee1c/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+32
+33    <uses-permission android:name="com.ahmetbircan.akillisulama.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+33-->[androidx.core:core:1.12.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/fa491052a0c4e52c4bc12c333827ee1c/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+33-->[androidx.core:core:1.12.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/fa491052a0c4e52c4bc12c333827ee1c/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+34
+35    <application
+35-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:21:5-39:19
+36        android:allowBackup="true"
+36-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:22:9-35
+37        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+37-->[androidx.core:core:1.12.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/fa491052a0c4e52c4bc12c333827ee1c/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
+38        android:debuggable="true"
+39        android:extractNativeLibs="false"
+40        android:icon="@mipmap/ic_launcher"
+40-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:23:9-43
+41        android:label="@string/app_name"
+41-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:24:9-41
+42        android:roundIcon="@mipmap/ic_launcher_round"
+42-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:25:9-54
+43        android:supportsRtl="true"
+43-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:26:9-35
+44        android:testOnly="true"
+45        android:theme="@style/Theme.AkilliSulama" >
+45-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:27:9-50
+46        <activity
+46-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:30:9-38:20
+47            android:name="com.ahmetbircan.akillisulama.MainActivity"
+47-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:31:13-41
+48            android:exported="true"
+48-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:32:13-36
+49            android:theme="@style/Theme.AkilliSulama" >
+49-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:33:13-54
+50            <intent-filter>
+50-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:34:13-37:29
+51                <action android:name="android.intent.action.MAIN" />
+51-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:35:17-69
+51-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:35:25-66
+52
+53                <category android:name="android.intent.category.LAUNCHER" />
+53-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:36:17-77
+53-->/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/src/main/AndroidManifest.xml:36:27-74
+54            </intent-filter>
+55        </activity>
+56        <activity
+56-->[androidx.compose.ui:ui-tooling-android:1.6.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/8d76280e531568405319188fdd1d21f4/transformed/ui-tooling-release/AndroidManifest.xml:23:9-25:39
+57            android:name="androidx.compose.ui.tooling.PreviewActivity"
+57-->[androidx.compose.ui:ui-tooling-android:1.6.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/8d76280e531568405319188fdd1d21f4/transformed/ui-tooling-release/AndroidManifest.xml:24:13-71
+58            android:exported="true" />
+58-->[androidx.compose.ui:ui-tooling-android:1.6.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/8d76280e531568405319188fdd1d21f4/transformed/ui-tooling-release/AndroidManifest.xml:25:13-36
+59
+60        <provider
+60-->[androidx.emoji2:emoji2:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/70ccd5e107bf9f562704edc47bb4f2ea/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
+61            android:name="androidx.startup.InitializationProvider"
+61-->[androidx.emoji2:emoji2:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/70ccd5e107bf9f562704edc47bb4f2ea/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
+62            android:authorities="com.ahmetbircan.akillisulama.androidx-startup"
+62-->[androidx.emoji2:emoji2:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/70ccd5e107bf9f562704edc47bb4f2ea/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
+63            android:exported="false" >
+63-->[androidx.emoji2:emoji2:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/70ccd5e107bf9f562704edc47bb4f2ea/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37
+64            <meta-data
+64-->[androidx.emoji2:emoji2:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/70ccd5e107bf9f562704edc47bb4f2ea/transformed/emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+65                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+65-->[androidx.emoji2:emoji2:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/70ccd5e107bf9f562704edc47bb4f2ea/transformed/emoji2-1.3.0/AndroidManifest.xml:30:17-75
+66                android:value="androidx.startup" />
+66-->[androidx.emoji2:emoji2:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/70ccd5e107bf9f562704edc47bb4f2ea/transformed/emoji2-1.3.0/AndroidManifest.xml:31:17-49
+67            <meta-data
+67-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/71d140806d2e5d2e40faccb985c2ec9d/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
+68                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+68-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/71d140806d2e5d2e40faccb985c2ec9d/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
+69                android:value="androidx.startup" />
+69-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/71d140806d2e5d2e40faccb985c2ec9d/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
+70            <meta-data
+70-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+71                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+71-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+72                android:value="androidx.startup" />
+72-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+73        </provider>
+74
+75        <receiver
+75-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+76            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+76-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+77            android:directBootAware="false"
+77-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+78            android:enabled="true"
+78-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+79            android:exported="true"
+79-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+80            android:permission="android.permission.DUMP" >
+80-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+81            <intent-filter>
+81-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+82                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+82-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+82-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+83            </intent-filter>
+84            <intent-filter>
+84-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+85                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+85-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+85-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+86            </intent-filter>
+87            <intent-filter>
+87-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+88                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+88-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+88-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+89            </intent-filter>
+90            <intent-filter>
+90-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+91                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+91-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+91-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/ahmet/.gradle/caches/9.0-milestone-1/transforms/a676b5e366f863f682f2cebf31381aa2/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
+92            </intent-filter>
+93        </receiver>
+94    </application>
+95
+96</manifest>
