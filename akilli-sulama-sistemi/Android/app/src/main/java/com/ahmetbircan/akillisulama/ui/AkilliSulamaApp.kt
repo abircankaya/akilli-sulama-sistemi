@@ -342,10 +342,7 @@ fun HavaDurumuKarti(
                 )
                 IconButton(onClick = onYenileClick, enabled = !yukleniyor) {
                     if (yukleniyor) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
-                            strokeWidth = 2.dp
-                        )
+                        Text("⏳", fontSize = 20.sp)
                     } else {
                         Icon(Icons.Default.Refresh, contentDescription = "Yenile")
                     }

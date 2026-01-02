@@ -1,4 +1,4 @@
-#Fri Jan 02 15:39:00 TRT 2026
+#Fri Jan 02 15:46:03 TRT 2026
 base.0=/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex
 base.1=/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
 base.2=/Users/ahmet/AndroidStudioProjects/akilli-sulama-sistemi/akilli-sulama-sistemi/Android/app/build/intermediates/dex/debug/mergeProjectDexDebug/10/classes.dex
