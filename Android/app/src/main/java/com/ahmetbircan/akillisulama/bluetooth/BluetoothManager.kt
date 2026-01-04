@@ -173,14 +173,6 @@ class BluetoothManager(private val context: Context) {
     }
     
     /**
-     * Sulama sıklığı gönder
-     * Format: K:2 (2 günde bir)
-     */
-    suspend fun siklikGonder(gun: Int): Boolean {
-        return veriGonder("K:$gun")
-    }
-    
-    /**
      * Arduino'dan gelen verileri oku
      */
     private suspend fun veriOku() = withContext(Dispatchers.IO) {

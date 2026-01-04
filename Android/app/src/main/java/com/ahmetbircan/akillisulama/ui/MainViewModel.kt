@@ -11,7 +11,6 @@ import com.ahmetbircan.akillisulama.bluetooth.BluetoothManager
 import com.ahmetbircan.akillisulama.data.*
 import com.ahmetbircan.akillisulama.location.Konum
 import com.ahmetbircan.akillisulama.location.LocationHelper
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -305,7 +304,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     /**
      * ML tabanlı sulama kararı (nem eşiği dahil)
      */
-    private fun sulamaKarari(yagisOlasiligi: Int, sicaklik: Int, nemEsik: Int): Boolean {
+    private fun sulamaKarari(yagisOlasiligi: Int, @Suppress("UNUSED_PARAMETER") sicaklik: Int, nemEsik: Int): Boolean {
         // Yağış bekleniyorsa sulama
         if (yagisOlasiligi > 50) return false
         
@@ -370,11 +369,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val mevsim = Mevsim.simdiGetir()
             val mevsimBasarili = bluetoothManager.mevsimGonder(mevsim.kod)
             
-            // Nem eşiğini gönder (yeni!)
+            // Nem eşiğini gönder
             val nemEsik = _sulamaAyarlari.value.nemEsik
             val nemBasarili = bluetoothManager.nemEsikGonder(nemEsik)
-            
-            if (yagisBasarili && sicaklikBasarili && mevsimBasarili) {
+
+            if (yagisBasarili && sicaklikBasarili && mevsimBasarili && nemBasarili) {
                 _hataMesaji.value = "Veriler başarıyla gönderildi!"
             } else {
                 _hataMesaji.value = "Veri gönderme hatası!"

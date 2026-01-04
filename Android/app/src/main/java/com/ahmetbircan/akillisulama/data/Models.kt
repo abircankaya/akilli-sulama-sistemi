@@ -284,19 +284,4 @@ object FallbackMahsulBilgileri {
         }?.value?.copy(mahsulAdi = mahsulAdi)
     }
 
-    /**
-     * Varsayılan bilgi (bilinmeyen mahsul için)
-     */
-    fun varsayilanBilgi(mahsulAdi: String): MahsulOnerisi {
-        return MahsulOnerisi(
-            mahsulAdi = mahsulAdi,
-            suIhtiyaci = "Orta",
-            sulamaSikligi = 2,
-            nemEsik = 600,
-            sulamaSaati = "21:00",
-            sulamaSuresi = 30,
-            aciklama = "Genel sulama önerisi: Toprağın üst kısmı kuruduğunda sulayın.",
-            mevsimNotu = "Yaz aylarında daha sık sulama gerekebilir."
-        )
-    }
 }
