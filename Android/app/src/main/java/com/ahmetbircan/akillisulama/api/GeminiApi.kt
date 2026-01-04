@@ -16,8 +16,49 @@ interface GeminiApi {
 
     companion object {
         const val BASE_URL = "https://generativelanguage.googleapis.com/"
-        const val API_KEY = "AIzaSyAi00h1SQicjDCCAW34jXBJrVjLX2vpl88"
+        const val API_KEY = "AIzaSyBZpSGP7rCB1c-TK3PqLXgvXzPzURr4H5E"
         
+        /**
+         * Haftalık sulama planı için AI prompt
+         */
+        fun createSulamaPlanPrompt(
+            mahsulAdi: String,
+            mevsim: String,
+            havaDurumu: String
+        ): String {
+
+            return """
+Sen bir tarım sulama uzmanısın. Aşağıdaki verilere göre 7 günlük akıllı sulama planı oluştur.
+
+Mahsul: $mahsulAdi
+Mevsim: $mevsim
+Hava Durumu: $havaDurumu
+
+KURALLAR:
+1. Yağış olasılığı %50+ olan günlerde sulama YAPMA
+2. Yarın yağış varsa bugün sulama YAPMA (su israfı)
+3. Dün yağış olduysa bugün sulama YAPMA (toprak nemli)
+4. Mahsulün su ihtiyacına göre sulama sıklığını ayarla
+5. Çok sıcak günlerde (35°C+) ekstra sulama gerekebilir
+
+SADECE aşağıdaki JSON formatında yanıt ver:
+{
+    "gunler": [
+        {"gun": 0, "sula": true/false, "sebep": "kısa açıklama"},
+        {"gun": 1, "sula": true/false, "sebep": "kısa açıklama"},
+        {"gun": 2, "sula": true/false, "sebep": "kısa açıklama"},
+        {"gun": 3, "sula": true/false, "sebep": "kısa açıklama"},
+        {"gun": 4, "sula": true/false, "sebep": "kısa açıklama"},
+        {"gun": 5, "sula": true/false, "sebep": "kısa açıklama"},
+        {"gun": 6, "sula": true/false, "sebep": "kısa açıklama"}
+    ],
+    "ozet": "Genel plan açıklaması"
+}
+
+SADECE JSON döndür, başka açıklama ekleme.
+""".trimIndent()
+        }
+
         fun createPrompt(mahsulAdi: String, mevsim: String): String {
             return """
 Sen bir tarım uzmanısın. Verilen ismin gerçek bir bitki/mahsul olup olmadığını kontrol et ve sulama bilgisi ver.

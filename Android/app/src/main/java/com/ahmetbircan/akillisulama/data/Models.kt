@@ -87,6 +87,23 @@ data class MahsulOnerisi(
 )
 
 /**
+ * AI'dan gelen günlük sulama kararı
+ */
+data class AiSulamaKarari(
+    val gun: Int,
+    val sula: Boolean,
+    val sebep: String
+)
+
+/**
+ * AI'dan gelen haftalık sulama planı
+ */
+data class AiSulamaPlan(
+    val gunler: List<AiSulamaKarari> = emptyList(),
+    val ozet: String = ""
+)
+
+/**
  * Kullanıcı sulama ayarları
  */
 data class SulamaAyarlari(

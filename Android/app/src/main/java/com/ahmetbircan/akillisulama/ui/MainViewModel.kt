@@ -70,7 +70,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     // Kullanıcı sulama ayarları
     private val _sulamaAyarlari = MutableStateFlow(SulamaAyarlari())
     val sulamaAyarlari: StateFlow<SulamaAyarlari> = _sulamaAyarlari
-    
+
+    // AI sulama planı
+    private val _aiSulamaPlan = MutableStateFlow(AiSulamaPlan())
+    val aiSulamaPlan: StateFlow<AiSulamaPlan> = _aiSulamaPlan
+
     init {
         // Eşleşmiş cihazları getir
         bluetoothManager.eslesmiscihazlariGetir()
@@ -158,21 +162,40 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 }
 
             } catch (e: HttpException) {
-                // API hatası - fallback kullan (sadece bilinen mahsuller için)
+                // API hatası - detaylı log
+                val errorBody = e.response()?.errorBody()?.string() ?: "no body"
+                android.util.Log.e("GeminiAPI", "HTTP ${e.code()}: $errorBody")
+
+                // 429 rate limit için özel mesaj
+                if (e.code() == 429) {
+                    val retryMatch = Regex("retry in (\\d+)").find(errorBody)
+                    val saniye = retryMatch?.groupValues?.get(1)?.toIntOrNull() ?: 30
+
+                    val fallbackOneri = FallbackMahsulBilgileri.bilgiGetir(mahsulAdi)
+                    if (fallbackOneri != null) {
+                        oneriUygula(fallbackOneri.copy(aciklama = fallbackOneri.aciklama + " (Çevrimdışı)"), "⏳ Kota aşıldı, hazır bilgi kullanıldı ($saniye sn bekle)")
+                    } else {
+                        _hataMesaji.value = "⏳ API kotası aşıldı! $saniye saniye bekleyin veya bilinen bir mahsul girin."
+                    }
+                    return@launch
+                }
+
                 val fallbackOneri = FallbackMahsulBilgileri.bilgiGetir(mahsulAdi)
                 if (fallbackOneri != null) {
-                    oneriUygula(fallbackOneri.copy(aciklama = fallbackOneri.aciklama + " (Çevrimdışı bilgi)"), "📋 Hazır bilgi kullanıldı")
+                    oneriUygula(fallbackOneri.copy(aciklama = fallbackOneri.aciklama + " (Çevrimdışı bilgi)"), "📋 Hazır bilgi kullanıldı (HTTP ${e.code()})")
                 } else {
-                    _hataMesaji.value = "❌ API bağlantısı başarısız ve '$mahsulAdi' hazır bilgilerde bulunamadı."
+                    _hataMesaji.value = "❌ API hatası (${e.code()}): '$mahsulAdi' bulunamadı."
                 }
 
             } catch (e: Exception) {
-                // Diğer hatalar - fallback kullan (sadece bilinen mahsuller için)
+                // Diğer hatalar - detaylı log
+                android.util.Log.e("GeminiAPI", "Exception: ${e.javaClass.simpleName} - ${e.message}", e)
+
                 val fallbackOneri = FallbackMahsulBilgileri.bilgiGetir(mahsulAdi)
                 if (fallbackOneri != null) {
                     oneriUygula(fallbackOneri.copy(aciklama = fallbackOneri.aciklama + " (Çevrimdışı bilgi)"), "📋 Hazır bilgi kullanıldı")
                 } else {
-                    _hataMesaji.value = "❌ Hata oluştu ve '$mahsulAdi' hazır bilgilerde bulunamadı."
+                    _hataMesaji.value = "❌ Hata: ${e.message}"
                 }
             }
 
@@ -300,7 +323,116 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _yukleniyor.value = false
         }
     }
-    
+
+    /**
+     * AI'dan haftalık sulama planı al
+     */
+    fun aiSulamaPlanGetir() {
+        val mahsul = _sulamaAyarlari.value.mahsulAdi
+        val gunler = _havaDurumu.value
+
+        if (mahsul.isBlank()) {
+            _hataMesaji.value = "Önce mahsul seçin!"
+            return
+        }
+        if (gunler.isEmpty()) {
+            _hataMesaji.value = "Önce hava durumu verilerini çekin!"
+            return
+        }
+
+        viewModelScope.launch {
+            _aiYukleniyor.value = true
+
+            try {
+                val mevsim = Mevsim.simdiGetir().isim
+
+                // Hava durumunu basit string formatında hazırla
+                val havaDurumuStr = gunler.mapIndexed { index, gun ->
+                    "Gün $index (${gun.tarih}): ${gun.sicaklikMin}°-${gun.sicaklikMax}°C, yağış %${gun.yagisOlasiligi}"
+                }.joinToString("\n")
+
+                val prompt = GeminiApi.createSulamaPlanPrompt(mahsul, mevsim, havaDurumuStr)
+
+                val request = GeminiRequest(
+                    contents = listOf(
+                        GeminiRequestContent(
+                            parts = listOf(GeminiRequestPart(text = prompt))
+                        )
+                    )
+                )
+
+                val response = geminiApi.generateContent(
+                    apiKey = GeminiApi.API_KEY,
+                    request = request
+                )
+
+                val text = response.candidates?.firstOrNull()
+                    ?.content?.parts?.firstOrNull()?.text ?: ""
+
+                // JSON parse et
+                val plan = parseAiSulamaPlan(text)
+                _aiSulamaPlan.value = plan
+                _hataMesaji.value = "🤖 AI sulama planı hazır!"
+
+            } catch (e: HttpException) {
+                val errorBody = e.response()?.errorBody()?.string() ?: ""
+                android.util.Log.e("GeminiAPI", "HTTP ${e.code()}: $errorBody")
+
+                when (e.code()) {
+                    429 -> {
+                        // Rate limit - saniye hesapla
+                        val retryMatch = Regex("retry in (\\d+)").find(errorBody)
+                        val saniye = retryMatch?.groupValues?.get(1)?.toIntOrNull() ?: 30
+                        _hataMesaji.value = "⏳ API kotası aşıldı! $saniye saniye sonra tekrar deneyin."
+                    }
+                    else -> _hataMesaji.value = "❌ API hatası (${e.code()})"
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("GeminiAPI", "Exception: ${e.javaClass.simpleName} - ${e.message}", e)
+                _hataMesaji.value = "AI plan hatası: ${e.localizedMessage ?: e.toString()}"
+            }
+
+            _aiYukleniyor.value = false
+        }
+    }
+
+    /**
+     * AI sulama planı yanıtını parse et
+     */
+    private fun parseAiSulamaPlan(text: String): AiSulamaPlan {
+        return try {
+            val jsonStart = text.indexOf('{')
+            val jsonEnd = text.lastIndexOf('}') + 1
+            val jsonStr = if (jsonStart >= 0 && jsonEnd > jsonStart) {
+                text.substring(jsonStart, jsonEnd)
+            } else text
+
+            val json = JSONObject(jsonStr)
+            val gunlerArray = json.optJSONArray("gunler")
+            val gunler = mutableListOf<AiSulamaKarari>()
+
+            if (gunlerArray != null) {
+                for (i in 0 until gunlerArray.length()) {
+                    val item = gunlerArray.getJSONObject(i)
+                    gunler.add(
+                        AiSulamaKarari(
+                            gun = item.optInt("gun", i),
+                            sula = item.optBoolean("sula", false),
+                            sebep = item.optString("sebep", "")
+                        )
+                    )
+                }
+            }
+
+            AiSulamaPlan(
+                gunler = gunler,
+                ozet = json.optString("ozet", "")
+            )
+        } catch (e: Exception) {
+            AiSulamaPlan()
+        }
+    }
+
     /**
      * ML tabanlı sulama kararı (nem eşiği dahil)
      */

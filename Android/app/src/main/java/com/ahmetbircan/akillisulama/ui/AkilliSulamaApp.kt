@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -42,7 +43,8 @@ fun AkilliSulamaApp(viewModel: MainViewModel = viewModel()) {
     val seciliCihaz by viewModel.seciliCihaz.collectAsState()
     val mahsulOnerisi by viewModel.mahsulOnerisi.collectAsState()
     val sulamaAyarlari by viewModel.sulamaAyarlari.collectAsState()
-    
+    val aiSulamaPlan by viewModel.aiSulamaPlan.collectAsState()
+
     var cihazSecimDialogAcik by remember { mutableStateOf(false) }
     var ayarlarDialogAcik by remember { mutableStateOf(false) }
     
@@ -145,15 +147,55 @@ fun AkilliSulamaApp(viewModel: MainViewModel = viewModel()) {
             // Haftalık Plan
             if (havaDurumu.isNotEmpty()) {
                 item {
-                    Text(
-                        "📅 Haftalık Sulama Planı",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            "📅 Haftalık Sulama Planı",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        Button(
+                            onClick = { viewModel.aiSulamaPlanGetir() },
+                            enabled = !aiYukleniyor && sulamaAyarlari.mahsulAdi.isNotBlank(),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFF9C27B0)
+                            ),
+                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                        ) {
+                            Text(
+                                if (aiYukleniyor) "⏳" else "🤖 AI Plan",
+                                fontSize = 13.sp
+                            )
+                        }
+                    }
                 }
-                
-                items(havaDurumu) { gun ->
-                    HaftalikPlanSatiri(gun, sulamaAyarlari)
+
+                // AI özeti varsa göster
+                if (aiSulamaPlan.ozet.isNotEmpty()) {
+                    item {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(
+                                containerColor = Color(0xFFF3E5F5)
+                            )
+                        ) {
+                            Text(
+                                "🤖 ${aiSulamaPlan.ozet}",
+                                modifier = Modifier.padding(12.dp),
+                                fontSize = 13.sp,
+                                color = Color(0xFF6A1B9A)
+                            )
+                        }
+                    }
+                }
+
+                itemsIndexed(havaDurumu) { index, gun ->
+                    val aiKarar = aiSulamaPlan.gunler.find { it.gun == index }
+                    HaftalikPlanSatiri(gun, sulamaAyarlari, index, havaDurumu, aiKarar)
                 }
             }
         }
@@ -665,8 +707,26 @@ fun HavaDurumuGunKarti(gun: GunlukHavaDurumu) {
 }
 
 @Composable
-fun HaftalikPlanSatiri(gun: GunlukHavaDurumu, ayarlar: SulamaAyarlari) {
-    val sulamaYapilacak = gun.sulamaPlani && gun.yagisOlasiligi < 50
+fun HaftalikPlanSatiri(
+    gun: GunlukHavaDurumu,
+    ayarlar: SulamaAyarlari,
+    gunIndex: Int,
+    tumGunler: List<GunlukHavaDurumu>,
+    aiKarar: AiSulamaKarari? = null
+) {
+    // AI kararı varsa onu kullan, yoksa kendi mantığımızı uygula
+    val sulamaYapilacak = if (aiKarar != null) {
+        aiKarar.sula
+    } else {
+        // Fallback: Kendi mantığımız
+        val sulamaGunu = (gunIndex % ayarlar.sulamaSikligi) == 0
+        val yarinYagisVar = gunIndex < tumGunler.size - 1 &&
+                            tumGunler[gunIndex + 1].yagisOlasiligi > 50
+        val dunYagisOldu = gunIndex > 0 &&
+                           tumGunler[gunIndex - 1].yagisOlasiligi > 50
+
+        sulamaGunu && gun.yagisOlasiligi < 50 && !yarinYagisVar && !dunYagisOldu
+    }
     
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -678,49 +738,68 @@ fun HaftalikPlanSatiri(gun: GunlukHavaDurumu, ayarlar: SulamaAyarlari) {
             }
         )
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                gun.tarih,
-                modifier = Modifier.width(100.dp),
-                fontWeight = FontWeight.Medium
-            )
-            
-            Text(
-                if (gun.yagisOlasiligi > 50) "🌧️" else "☀️",
-                modifier = Modifier.width(40.dp)
-            )
-            
-            Text(
-                "${gun.sicaklikMin}°/${gun.sicaklikMax}°",
-                modifier = Modifier.width(70.dp)
-            )
-            
-            Text(
-                "%${gun.yagisOlasiligi}",
-                modifier = Modifier.width(50.dp),
-                color = Color(0xFF2196F3)
-            )
-            
-            Spacer(Modifier.weight(1f))
-            
-            Text(
-                when {
-                    gun.yagisOlasiligi > 50 -> "🌧️ YAĞIŞ"
-                    sulamaYapilacak -> "💧 SULA"
-                    else -> "⏸️ BEKLE"
-                },
-                fontWeight = FontWeight.Bold,
-                color = when {
-                    gun.yagisOlasiligi > 50 -> Color(0xFF1565C0)
-                    sulamaYapilacak -> Color(0xFF4CAF50)
-                    else -> Color(0xFF757575)
+        Column(modifier = Modifier.padding(12.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    gun.tarih.takeLast(5),
+                    modifier = Modifier.width(60.dp),
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 14.sp
+                )
+
+                Text(
+                    if (gun.yagisOlasiligi > 50) "🌧️" else "☀️",
+                    modifier = Modifier.width(30.dp)
+                )
+
+                Text(
+                    "${gun.sicaklikMin}°/${gun.sicaklikMax}°",
+                    modifier = Modifier.width(65.dp),
+                    fontSize = 13.sp
+                )
+
+                Text(
+                    "%${gun.yagisOlasiligi}",
+                    modifier = Modifier.width(45.dp),
+                    color = Color(0xFF2196F3),
+                    fontSize = 13.sp
+                )
+
+                Spacer(Modifier.weight(1f))
+
+                // AI ikonu göster
+                if (aiKarar != null) {
+                    Text("🤖", modifier = Modifier.padding(end = 4.dp))
                 }
-            )
+
+                Text(
+                    when {
+                        gun.yagisOlasiligi > 50 -> "🌧️ YAĞIŞ"
+                        sulamaYapilacak -> "💧 SULA"
+                        else -> "⏸️ BEKLE"
+                    },
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 13.sp,
+                    color = when {
+                        gun.yagisOlasiligi > 50 -> Color(0xFF1565C0)
+                        sulamaYapilacak -> Color(0xFF4CAF50)
+                        else -> Color(0xFF757575)
+                    }
+                )
+            }
+
+            // AI sebep açıklaması
+            if (aiKarar != null && aiKarar.sebep.isNotEmpty()) {
+                Text(
+                    aiKarar.sebep,
+                    fontSize = 11.sp,
+                    color = Color(0xFF6A1B9A),
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
         }
     }
 }
